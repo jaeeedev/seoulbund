@@ -93,16 +93,18 @@ app.get("/api/users/logout", (req, res) => {
   );
 });
 
+app.listen(PORT, () => {
+  console.log(`server starts at ${PORT}`);
+});
+
+//정적 파일 제공
 // eslint-disable-next-line no-undef
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
+//라우트 설정
 app.get("*", (req, res) => {
   // eslint-disable-next-line no-undef
   res.sendFile(path.join(__dirname, "client/build/index.html"));
-});
-
-app.listen(PORT, () => {
-  console.log(`server starts at ${PORT}`);
 });
