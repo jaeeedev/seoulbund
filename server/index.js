@@ -23,10 +23,6 @@ mongoose
   })
   .catch((e) => console.log(e));
 
-app.get("/", (req, res) => {
-  return res.send("Hello, world!");
-});
-
 app.post("/api/users/register", (req, res) => {
   bcrypt.hash(req.body.password, 10, function (err, hash) {
     const user = new User({
