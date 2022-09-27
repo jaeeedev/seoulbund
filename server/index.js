@@ -101,9 +101,9 @@ app.listen(port, () => {
 // eslint-disable-next-line no-undef
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
-
-  app.get("*", (req, res) => {
-    // eslint-disable-next-line no-undef
-    res.sendFile(path.join(__dirname, "client/build/index.html"));
-  });
 }
+
+app.get("/*", (req, res) => {
+  // eslint-disable-next-line no-undef
+  res.sendFile(path.join(__dirname, "/client/build/index.html"));
+});
