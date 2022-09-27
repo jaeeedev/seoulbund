@@ -10,13 +10,14 @@
     "mongoose": "^6.6.1"
   },
   "devDependencies": {
+    "eslint": "^8.24.0",
+    "eslint-plugin-react": "^7.31.8",
     "http-proxy-middleware": "^2.0.6",
     "nodemon": "^2.0.20"
   },
   "scripts": {
     "start": "node server/index.js",
     "server": "nodemon server/index.js",
-    "client": "cd client && npm start",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
     "heroku-postbuild": "cd client && npm install && npm run build"
   }

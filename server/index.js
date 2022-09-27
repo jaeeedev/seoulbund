@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 5000;
 const { User } = require("./models/User");
 const bodyParser = require("body-parser");
@@ -7,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const path = require("path");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -103,12 +105,14 @@ app.get("/api/users/logout", (req, res) => {
   );
 });
 
-// 리액트 정적 파일 제공
-app.use(express.static(path.join(__dirname, "client/build")));
+// eslint-disable-next-line no-undef
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
-// 라우트 설정
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+app.get("/", (request, response) => {
+  // eslint-disable-next-line no-undef
+  response.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
 app.listen(PORT, () => {
