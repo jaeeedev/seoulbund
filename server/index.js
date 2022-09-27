@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 // eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 5000;
-const { User } = require("./models/User");
+const { User } = require("./models/user");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
@@ -28,14 +28,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/users/register", (req, res) => {
-  // User.findOne({ id: req.body.id }, (err, user) => {
-  //   if (user) {
-  //     return res.json({
-  //       existedId: true,
-  //     });
-  //   }
-  // });
-
   bcrypt.hash(req.body.password, 10, function (err, hash) {
     const user = new User({
       id: req.body.id,
