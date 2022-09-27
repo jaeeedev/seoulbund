@@ -18,6 +18,6 @@
     "server": "nodemon server/index.js",
     "client": "cd client && npm start",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
-    "heroku-postbuild": "cd cliend && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   }
 }
