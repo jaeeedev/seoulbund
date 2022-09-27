@@ -103,6 +103,15 @@ app.get("/api/users/logout", (req, res) => {
   );
 });
 
+if (process.env.NODE_ENV === "production") {
+  //"client/build"는 react의 build파일 경로이다
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`server starts at ${PORT}`);
 });
