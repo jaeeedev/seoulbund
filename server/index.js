@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT || 5000;
 const { User } = require("./models/User");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -103,6 +103,6 @@ app.get("/api/users/logout", (req, res) => {
   );
 });
 
-app.listen(port, () => {
-  console.log(`server starts at ${port}`);
+app.listen(PORT, () => {
+  console.log(`server starts at ${PORT}`);
 });
