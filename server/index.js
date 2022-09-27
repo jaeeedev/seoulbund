@@ -104,7 +104,7 @@ app.use(express.static(path.join(__dirname, "client/build")));
 
 app.get("*", (req, res) => {
   // eslint-disable-next-line no-undef
-  res.sendFile(path.resolve(__dirname + "/client/build/index.html"));
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
 app.listen(PORT, () => {
