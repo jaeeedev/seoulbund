@@ -95,6 +95,7 @@ app.get("/api/users/logout", (req, res) => {
 
 // eslint-disable-next-line no-undef
 if (process.env.NODE_ENV === "production") {
+  // eslint-disable-next-line no-undef
   app.use(express.static(path.join(__dirname, "client/build")));
 }
 
