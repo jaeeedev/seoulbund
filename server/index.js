@@ -98,9 +98,9 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-app.get("/", (request, response) => {
+app.get("/", (req, res) => {
   // eslint-disable-next-line no-undef
-  response.sendFile(path.join(__dirname, "client/build", "index.html"));
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
 app.listen(PORT, () => {
