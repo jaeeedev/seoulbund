@@ -15,8 +15,9 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "backend": "nodemon server/index.js",
+    "server": "nodemon server/index.js",
+    "client": "cd client && npm start",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
-    "heroku-postbuild": "cd client && NPM_CONFIG_PRODUCTION=false npm install && npm run build"
+    "heroku-postbuild": "cd cliend && npm install && npm run build"
   }
 }
