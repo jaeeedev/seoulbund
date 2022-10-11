@@ -24,7 +24,7 @@ userSchema.methods.checkPassword = function (password) {
 };
 
 userSchema.methods.generateToken = function () {
-  const token = jwt.sign(this._id.toHexString(), "secretToken");
+  const token = jwt.sign({ _id: this._id }, "secretToken", { expiresIn: "7d" });
   return token;
 };
 

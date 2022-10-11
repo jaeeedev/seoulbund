@@ -70,7 +70,9 @@ app.get("/api/users/logout", (req, res) => {
   const token = req.cookies.cookie_token;
 
   if (!token) {
-    console.log("no token");
+    return res.json({
+      message: "no token",
+    });
   }
 
   const decoded = jwt.verify(token, "secretToken");
