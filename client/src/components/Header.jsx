@@ -53,6 +53,10 @@ const Header = () => {
   const logoutHandler = async () => {
     const data = await (await fetch("/api/users/logout")).json();
 
+    if (data.status === false) {
+      dispatch(userActions.nowLogout());
+    }
+
     if (data.logoutSuccess) {
       dispatch(userActions.nowLogout());
     }

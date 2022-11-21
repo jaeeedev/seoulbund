@@ -72,6 +72,7 @@ app.get("/api/users/logout", (req, res) => {
   if (!token) {
     return res.json({
       message: "no token",
+      status: false,
     });
   }
 
