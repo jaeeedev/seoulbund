@@ -59,10 +59,15 @@ app.post("/api/users/login", (req, res) => {
 
     const token = user.generateToken();
 
-    return res.cookie("cookie_token", token).status(200).json({
-      loginSuccess: true,
-      userId: user._id,
-    });
+    return res
+      .cookie("cookie_token", token, {
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      })
+      .status(200)
+      .json({
+        loginSuccess: true,
+        userId: user._id,
+      });
   });
 });
 
