@@ -1,15 +1,27 @@
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { MdOutlineShoppingCart, MdFavoriteBorder } from "react-icons/md";
 import { HiPlus, HiMinus } from "react-icons/hi";
 import cupData from "../cupData";
 import TopBtn from "../components/TopBtn";
-import { cartActions } from "../store";
 import Popup from "../components/Popup";
 import tData from "../tData";
 import Recommend from "../components/Recommend";
+import app from "../fb";
+import { getAuth } from "firebase/auth";
+import {
+  collection,
+  doc,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  updateDoc,
+  increment,
+} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 const OrderBox = styled.div`
   width: 1160px;
@@ -151,6 +163,7 @@ function ProductPage({ loca }) {
   const params = useParams();
   //현재 보고있는 상품정보
   const data = locaData.find((data) => data.param === params.title);
+  const navigate = useNavigate();
 
   //같은 pathname && 카테고리의 상품을 무작위 추천 / 자기 자신은 제외해야함
   const recommendArr = locaData
@@ -158,11 +171,12 @@ function ProductPage({ loca }) {
     .sort(() => Math.random() - 0.5)
     .filter((el, i) => i < 4);
 
-  const dispatch = useDispatch();
   const [count, setCount] = useState(0);
   const [openPopup, setOpenPopup] = useState(false);
   const [openZeroPopup, setOpenZeroPopup] = useState(false);
   const [open, setOpen] = useState(false);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
   function amountUp() {
     setCount((prev) => prev + 1);
@@ -181,14 +195,55 @@ function ProductPage({ loca }) {
     }
   }
 
+  const addData = useCallback(async () => {
+    //로그인이 안된 경우 로그인 페이지로 넘겨주기
+
+    const itemObj = { ...data, count };
+    //이미 데이터베이스에 있으면 수량만 업뎃해서 넘기기
+
+    try {
+      if (auth.currentUser) {
+        const cartRef = doc(db, "cart", auth.currentUser.uid);
+
+        //이미 데이터베이스에 있는가?
+        const q = query(
+          collection(db, "cart", auth.currentUser.uid, "items"),
+          where("param", "==", data.param)
+        );
+        let targetRef = {};
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          targetRef = doc.ref;
+        });
+
+        const isExist = Object.keys(targetRef).length !== 0;
+
+        if (isExist) {
+          //팝업 띄우고 수량만 업데이트 해주기
+
+          await updateDoc(targetRef, {
+            count: increment(count),
+          });
+        } else {
+          await addDoc(collection(cartRef, "items"), itemObj);
+        }
+      } else {
+        //로그인이 아닌 경우 이동시켜주기
+        navigate("/login");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [auth.currentUser, count, data, db, navigate]);
+
   const dispatchItem = useCallback(() => {
     if (count !== 0) {
-      dispatch(cartActions.addItem({ ...data, count: count, checked: false }));
+      addData();
       setOpenPopup(true);
     } else {
       setOpenZeroPopup(true);
     }
-  }, [count, data, dispatch]);
+  }, [addData, count]);
 
   //페이지 이동 시 스크롤 위로 올려주기
   useEffect(() => {

@@ -6,6 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 const SearchBox = styled.form`
   position: relative;
+
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const SearchBar = styled.input`

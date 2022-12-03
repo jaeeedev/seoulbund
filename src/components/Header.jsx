@@ -2,14 +2,16 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import Search from "./Search";
 import { useSelector, useDispatch } from "react-redux";
-import { userActions } from "../store";
+import { cartActions, userActions } from "../store";
+import { getAuth, signOut } from "firebase/auth";
+import app from "../fb";
 
 const HeaderBox = styled.header`
   background-color: var(--green);
 `;
 const InnerHeader = styled.div`
   margin: 0 auto;
-  width: 1320px;
+  max-width: 1320px;
   display: flex;
   align-items: center;
 `;
@@ -51,14 +53,13 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const logoutHandler = async () => {
-    const data = await (await fetch("/api/users/logout")).json();
-
-    if (data.status === false) {
+    const auth = getAuth(app);
+    try {
+      await signOut(auth);
+      dispatch(cartActions.setCart([]));
       dispatch(userActions.nowLogout());
-    }
-
-    if (data.logoutSuccess) {
-      dispatch(userActions.nowLogout());
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -83,9 +84,6 @@ const Header = () => {
           </Li>
           <Li>
             <Link to={"/cups"}>음료용품</Link>
-          </Li>
-          <Li>
-            <Link to={"/taste"}>번더의 취향</Link>
           </Li>
         </HeaderUl>
         <ToolUl>
