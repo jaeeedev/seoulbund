@@ -17,6 +17,8 @@ const LoginForm = () => {
       await signInWithEmailAndPassword(auth, email, password);
       setCurrentError("");
       setErrorMsg("");
+
+      navigate("/");
     } catch (err) {
       console.log(err);
 
@@ -46,7 +48,6 @@ const LoginForm = () => {
     validationSchema,
     onSubmit: async (values) => {
       await loginWithEmail(auth, values.email, values.password);
-      navigate("/");
     },
   });
 
