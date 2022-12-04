@@ -25,9 +25,6 @@ function ProductListPage() {
   const pathname = location.pathname.replace("/", "");
   const [currentData, setCurrentData] = useState(tData);
 
-  const [amount, setAmount] = useState(8);
-  const ioRef = useRef(null);
-
   const newArr =
     currentFilter === "all"
       ? currentData
@@ -102,7 +99,6 @@ function ProductListPage() {
           </ProductItem>
         ))}
       </ProductBox>
-      <p ref={ioRef}>관찰 지점</p>
 
       <TopBtn />
     </div>
