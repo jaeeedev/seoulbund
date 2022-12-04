@@ -4,16 +4,30 @@ import { useNavigate } from "react-router-dom";
 import { FormContainer, LoginInput, AlertText, LoginBtn } from "../pages/Login";
 import app from "../fb";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 
 const LoginForm = () => {
+  const [errorMsg, setErrorMsg] = useState("");
+  const [currentError, setCurrentError] = useState("");
   const navigate = useNavigate();
   const auth = getAuth(app);
 
   const loginWithEmail = async (auth, email, password) => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-    } catch (e) {
-      console.log(e);
+      await signInWithEmailAndPassword(auth, email, password);
+      setCurrentError("");
+      setErrorMsg("");
+    } catch (err) {
+      console.log(err);
+
+      if (err.message.includes("user")) {
+        setCurrentError("user");
+        setErrorMsg("존재하지 않는 아이디입니다.");
+      }
+      if (err.message.includes("password")) {
+        setCurrentError("password");
+        setErrorMsg("틀린 비밀번호입니다.");
+      }
     }
   };
 
@@ -45,10 +59,12 @@ const LoginForm = () => {
         value={formik.values.email}
         onChange={formik.handleChange}
         placeholder="Email"
+        autoComplete="email"
       />
       {formik.touched.email && formik.errors.email && (
         <AlertText>{formik.errors.email}</AlertText>
       )}
+      {currentError === "user" && <AlertText>{errorMsg}</AlertText>}
 
       <LoginInput
         type="password"
@@ -61,6 +77,7 @@ const LoginForm = () => {
       {formik.touched.password && formik.errors.password && (
         <AlertText>{formik.errors.password}</AlertText>
       )}
+      {currentError === "password" && <AlertText>{errorMsg}</AlertText>}
 
       <LoginBtn type="submit">로그인</LoginBtn>
     </FormContainer>
