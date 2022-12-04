@@ -176,7 +176,6 @@ function Cart() {
     });
 
     if (userInfo && userInfo.uid) getCart();
-    console.log(userInfo.uid, userInfo.displayName);
   }, [userInfo.uid, userInfo.displayName]);
 
   return (
